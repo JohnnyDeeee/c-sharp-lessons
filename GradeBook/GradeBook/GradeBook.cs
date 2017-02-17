@@ -22,5 +22,19 @@ namespace GradeBook
         {
             mainForm.AddMessage(string.Format("Welcome to the grade book for: {0}", this.courseName));
         }
+
+        public int Average(int[] grades)
+        {
+            int total = 0;
+            int gradeCounter = 0;
+            foreach (var grade in grades)
+            {
+                total += grade;
+                gradeCounter++;
+            }
+
+            return total / gradeCounter;
+            
+        }
     }
 }
