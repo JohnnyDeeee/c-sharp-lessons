@@ -15,10 +15,10 @@ namespace ShopManagementSystem
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class shopmsEntities : DbContext
+    public partial class ShopmsEntities : DbContext
     {
-        public shopmsEntities()
-            : base("name=shopmsEntities")
+        public ShopmsEntities()
+            : base("name=ShopmsEntities")
         {
         }
     

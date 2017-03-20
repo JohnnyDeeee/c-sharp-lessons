@@ -21,7 +21,7 @@ namespace ShopManagementSystem
         }
     
         public int Id { get; set; }
-        public byte[] Name { get; set; }
+        public string Name { get; set; }
         public string Short { get; set; }
         public decimal Price { get; set; }
         public int Category_Id { get; set; }

@@ -5,17 +5,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="62d4c9f8d2194e858bdc8f17b65873dc" Name="Diagram1">
-        <EntityTypeShape EntityType="shopmsModel.Category" Width="1.5" PointX="0.75" PointY="1.5" />
-        <EntityTypeShape EntityType="shopmsModel.Customer" Width="1.5" PointX="7.25" PointY="4.25" />
-        <EntityTypeShape EntityType="shopmsModel.Item" Width="1.5" PointX="3" PointY="1" />
-        <EntityTypeShape EntityType="shopmsModel.Order" Width="1.5" PointX="5.25" PointY="4.375" />
-        <EntityTypeShape EntityType="shopmsModel.Orderrule" Width="1.5" PointX="5.25" PointY="1.5" />
-        <EntityTypeShape EntityType="shopmsModel.Supplier" Width="1.5" PointX="0.5" PointY="4.125" />
-        <AssociationConnector Association="shopmsModel.FK_Item_Category" />
-        <AssociationConnector Association="shopmsModel.FK_Order_Customer" />
-        <AssociationConnector Association="shopmsModel.FK_Item_Supplier" />
-        <AssociationConnector Association="shopmsModel.FK_Orderrule_Item" />
-        <AssociationConnector Association="shopmsModel.FK_Orderrule_Order" />
+        <EntityTypeShape EntityType="ShopmsModel.Category" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="ShopmsModel.Customer" Width="1.5" PointX="0.75" PointY="8.375" />
+        <EntityTypeShape EntityType="ShopmsModel.Item" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="ShopmsModel.Order" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="ShopmsModel.Orderrule" Width="1.5" PointX="5.25" PointY="1.5" />
+        <EntityTypeShape EntityType="ShopmsModel.Supplier" Width="1.5" PointX="0.75" PointY="5.5" />
+        <AssociationConnector Association="ShopmsModel.FK_Item_Category" />
+        <AssociationConnector Association="ShopmsModel.FK_Order_Customer" />
+        <AssociationConnector Association="ShopmsModel.FK_Item_Supplier" />
+        <AssociationConnector Association="ShopmsModel.FK_Orderrule_Item" />
+        <AssociationConnector Association="ShopmsModel.FK_Orderrule_Order" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
