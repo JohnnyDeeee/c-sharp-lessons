@@ -6,11 +6,11 @@
     <edmx:Diagrams>
       <Diagram DiagramId="62d4c9f8d2194e858bdc8f17b65873dc" Name="Diagram1">
         <EntityTypeShape EntityType="shopmsModel.Category" Width="1.5" PointX="0.75" PointY="1.5" />
-        <EntityTypeShape EntityType="shopmsModel.Customer" Width="1.5" PointX="7.875" PointY="4.125" />
+        <EntityTypeShape EntityType="shopmsModel.Customer" Width="1.5" PointX="7.25" PointY="4.25" />
         <EntityTypeShape EntityType="shopmsModel.Item" Width="1.5" PointX="3" PointY="1" />
-        <EntityTypeShape EntityType="shopmsModel.Order" Width="1.5" PointX="5.25" PointY="4.125" />
+        <EntityTypeShape EntityType="shopmsModel.Order" Width="1.5" PointX="5.25" PointY="4.375" />
         <EntityTypeShape EntityType="shopmsModel.Orderrule" Width="1.5" PointX="5.25" PointY="1.5" />
-        <EntityTypeShape EntityType="shopmsModel.Supplier" Width="1.5" PointX="0.625" PointY="4.25" />
+        <EntityTypeShape EntityType="shopmsModel.Supplier" Width="1.5" PointX="0.5" PointY="4.125" />
         <AssociationConnector Association="shopmsModel.FK_Item_Category" />
         <AssociationConnector Association="shopmsModel.FK_Order_Customer" />
         <AssociationConnector Association="shopmsModel.FK_Item_Supplier" />
