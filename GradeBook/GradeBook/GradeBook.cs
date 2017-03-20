@@ -10,6 +10,11 @@ namespace GradeBook
     {
         public string courseName { get; set; }
         private GradeBookTest mainForm;
+        int countA;
+        int countB;
+        int countC;
+        int countD;
+        int countF;
 
         // Constructor
         public GradeBook(GradeBookTest mainForm)
@@ -21,6 +26,40 @@ namespace GradeBook
         public void DisplayMessage()
         {
             mainForm.AddMessage(string.Format("Welcome to the grade book for: {0}", this.courseName));
+        }
+
+        public double Average(int[] grades)
+        {
+            int total = 0;
+            int gradeCounter = 0;
+            foreach (var grade in grades)
+            {
+                total += grade;
+                gradeCounter++;
+
+                switch (grade/10)
+                {
+                    case 9:
+                    case 10:
+                        countA++;
+                        break;
+                    case 8:
+                        countB++;
+                        break;
+                    case 7:
+                        countC++;
+                        break;
+                    case 6:
+                        countD++;
+                        break;
+                    default:
+                        countF++;
+                        break;
+                }
+            }
+
+            return (double) total / gradeCounter;
+            
         }
     }
 }
