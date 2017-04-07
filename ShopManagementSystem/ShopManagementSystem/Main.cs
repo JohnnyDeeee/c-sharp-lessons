@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ShopManagementSystem
@@ -17,10 +19,11 @@ namespace ShopManagementSystem
                     Generation.Generate();
 
                 // Initialize data list
-                foreach (Item item in context.Item)
-                {
-                    listShopItems.Items.Add(item.Name + " - " + item.Price); // TODO: Create columns in list
-                }
+                //foreach (Item item in context.Item)
+                //{
+                //    listShopItems.Items.Add(item.Name + " - " + item.Price); // TODO: Create columns in list
+                //}
+                listShopItems.SetObjects(context.Item);
             }
         }
     }

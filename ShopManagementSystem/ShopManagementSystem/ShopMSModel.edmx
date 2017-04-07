@@ -29,11 +29,11 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Short" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="Category_Id" Type="int" Nullable="false" />
           <Property Name="Description" Type="text" />
           <Property Name="Supplier_Id" Type="int" Nullable="false" />
+          <Property Name="Stock" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -185,31 +185,31 @@
       <Schema Namespace="ShopmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ShopmsEntities" annotation:LazyLoadingEnabled="true">
           <FunctionImport Name="sp_alterdiagram">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
             <Parameter Name="version" Mode="In" Type="Int32" />
             <Parameter Name="definition" Mode="In" Type="Binary" />
           </FunctionImport>
           <FunctionImport Name="sp_creatediagram">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
             <Parameter Name="version" Mode="In" Type="Int32" />
             <Parameter Name="definition" Mode="In" Type="Binary" />
           </FunctionImport>
           <FunctionImport Name="sp_dropdiagram">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(ShopmsModel.sp_helpdiagramdefinition_Result)">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(ShopmsModel.sp_helpdiagrams_Result)">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_renamediagram">
-          <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
@@ -278,11 +278,11 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Short" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
           <Property Name="Category_Id" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Supplier_Id" Type="Int32" Nullable="false" />
+          <Property Name="Stock" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="ShopmsModel.FK_Item_Category" FromRole="Item" ToRole="Category" />
           <NavigationProperty Name="Supplier" Relationship="ShopmsModel.FK_Item_Supplier" FromRole="Item" ToRole="Supplier" />
           <NavigationProperty Name="Orderrule" Relationship="ShopmsModel.FK_Orderrule_Item" FromRole="Item" ToRole="Orderrule" />
@@ -430,11 +430,11 @@
           <EntitySetMapping Name="Item">
             <EntityTypeMapping TypeName="ShopmsModel.Item">
               <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
                 <ScalarProperty Name="Supplier_Id" ColumnName="Supplier_Id" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Short" ColumnName="Short" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

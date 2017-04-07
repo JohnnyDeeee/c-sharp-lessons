@@ -24,20 +24,23 @@ namespace ShopManagementSystem
         // Generate random items and put those in the dbase
         private static void GenerateItems(int amount = 100)
         {
-            List<string> usedShorts = new List<string>();
+            List<string> usedNames = new List<string>();
+            const int minNameLength = 5;
+            const int maxNameLength = 15;
             for (int i = 0; i < amount; i++)
             {
                 using (var context = new ShopmsEntities())
                 {
                     Item item = new Item();
-                    item.Name = GenerateRandomText(rand.Next(10, 15));
-                    item.Short = item.Name.Substring(8);
-                    while(usedShorts.Contains(item.Short)) // TODO: Add timeout
-                        item.Short = item.Name.Substring(8);
+                    item.Name = GenerateRandomText(rand.Next(minNameLength, maxNameLength));
+                    while(usedNames.Contains(item.Name)) // TODO: Add timeout
+                        item.Name = GenerateRandomText(rand.Next(minNameLength, maxNameLength));
+                    usedNames.Add(item.Name);
                     item.Price = Math.Round(Util.RandomDecimal(0, 10000));
                     item.Category_Id = context.Category.OrderBy(x => Guid.NewGuid()).First().Id;
                     item.Description = GenerateRandomText(rand.Next(10, 20));
                     item.Supplier_Id = context.Supplier.OrderBy(x => Guid.NewGuid()).First().Id;
+                    item.Stock = rand.Next(0, 1000);
                     context.Item.Add(item);
                     context.SaveChanges();
                 }
@@ -54,7 +57,7 @@ namespace ShopManagementSystem
                 {
                     Category category = new Category();
                     category.Name = GenerateRandomText(rand.Next(4, 8));
-                    while (usedNames.Contains(category.Name)) // TODO: Add timeout
+                    while(usedNames.Contains(category.Name)) // TODO: Add timeout
                         category.Name = GenerateRandomText(rand.Next(4, 8));
                     usedNames.Add(category.Name);
                     category.Description = GenerateRandomText(rand.Next(10, 30));
@@ -108,7 +111,7 @@ namespace ShopManagementSystem
                 {
                     Order order = new Order();
                     order.Customer_Id = context.Customer.OrderBy(x => Guid.NewGuid()).First().Id;
-                    order.Date = new DateTime(rand.Next(2001, 2080), rand.Next(1,12), rand.Next(1, 30));
+                    order.Date = new DateTime(rand.Next(2001, 2080), rand.Next(1,12), rand.Next(1, 28));
                     context.Order.Add(order);
                     context.SaveChanges();
                 }
@@ -134,7 +137,7 @@ namespace ShopManagementSystem
         // Generate random item names
         private static string GenerateRandomText(int textLength = 8, bool numbers = false)
         {
-            const string chars = "abcdefghijklmnopqrstuvwxyz";
+            string chars = "abcdefghijklmnopqrstuvwxyz";
             const string nums = "1234567890";
 
             string name = "";
