@@ -39,6 +39,7 @@
             this.columnPrice = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.columnDescription = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.columnStock = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.columnCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listShopItems)).BeginInit();
             this.SuspendLayout();
@@ -95,13 +96,15 @@
             this.listShopItems.AllColumns.Add(this.columnDescription);
             this.listShopItems.AllColumns.Add(this.columnPrice);
             this.listShopItems.AllColumns.Add(this.columnStock);
+            this.listShopItems.AllColumns.Add(this.columnCategory);
             this.listShopItems.AllowColumnReorder = true;
             this.listShopItems.CellEditUseWholeCell = false;
             this.listShopItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnName,
             this.columnDescription,
             this.columnPrice,
-            this.columnStock});
+            this.columnStock,
+            this.columnCategory});
             this.listShopItems.Cursor = System.Windows.Forms.Cursors.Default;
             this.listShopItems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listShopItems.Location = new System.Drawing.Point(0, 24);
@@ -138,6 +141,11 @@
             this.columnStock.AspectName = "FormattedStock";
             this.columnStock.Text = "Stock";
             // 
+            // columnCategory
+            // 
+            this.columnCategory.AspectName = "CategoryName";
+            this.columnCategory.Text = "Category";
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,6 +180,7 @@
         private BrightIdeasSoftware.OLVColumn columnPrice;
         private BrightIdeasSoftware.OLVColumn columnDescription;
         private BrightIdeasSoftware.OLVColumn columnStock;
+        private BrightIdeasSoftware.OLVColumn columnCategory;
     }
 }
 
