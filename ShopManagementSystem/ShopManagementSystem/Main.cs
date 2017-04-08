@@ -3,6 +3,8 @@ using ShopManagementSystem;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -39,6 +41,7 @@ namespace ShopManagementSystem
 
                 // Initialize cell editors
                 combi.list.CellEditStarting += new CellEditEventHandler(this.lists_cellEditStarting);
+                combi.list.CellEditValidating += new CellEditEventHandler(this.lists_cellEditValidating);
                 combi.list.CellEditFinishing += new CellEditEventHandler(this.lists_cellEditFinishing);
                 combi.list.CellEditFinished += new CellEditEventHandler(this.lists_cellEditFinished);
             }
@@ -196,6 +199,103 @@ namespace ShopManagementSystem
             }
         }
 
+        // TODO: Shorten this
+        private void lists_cellEditValidating(object sender, CellEditEventArgs e)
+        {
+            ObjectListView list = (ObjectListView)sender;
+
+            // Items editor
+            if (list.Name == listShopItems.Name)
+            {
+                // Category combo
+                if (e.Column.AspectName == "CategoryName")
+                {
+                    try
+                    {
+                        string name = (e.Control as ComboBox).SelectedItem.ToString();
+                        dbContext.Category.First(x => x.Name == name);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ArgumentNullException)
+                            MessageBox.Show("Please make sure you dont fill in empty values.", "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidOperationException)
+                            MessageBox.Show("Something went wrong while validating your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+
+                        e.Cancel = true;
+                    }
+                }
+            }
+            // Orders editor
+            else if (list.Name == listShopOrders.Name)
+            {
+                // Customer ID combo
+                if (e.Column.AspectName == "Customer_Id")
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                        dbContext.Customer.First(x => x.Id == id);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ArgumentNullException)
+                            MessageBox.Show("Please make sure you dont fill in empty values.", "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidOperationException)
+                            MessageBox.Show("Something went wrong while validating your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidCastException)
+                            MessageBox.Show("Please make sure you only fill in numbers where necessary.", "Error", MessageBoxButtons.OK);
+
+                        e.Cancel = true;
+                    }
+                }
+            }
+            // Orderrules editor
+            else if (list.Name == listShopOrderrules.Name)
+            {
+                // Order ID combo
+                if (e.Column.AspectName == "Order_Id")
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                        dbContext.Order.First(x => x.Id == id);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ArgumentNullException)
+                            MessageBox.Show("Please make sure you dont fill in empty values.", "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidOperationException)
+                            MessageBox.Show("Something went wrong while validating your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidCastException)
+                            MessageBox.Show("Please make sure you only fill in numbers where necessary.", "Error", MessageBoxButtons.OK);
+
+                        e.Cancel = true;
+                    }
+                }
+                // Item ID combo
+                else if (e.Column.AspectName == "Item_Id")
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                        dbContext.Item.First(x => x.Id == id);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ArgumentNullException)
+                            MessageBox.Show("Please make sure you dont fill in empty values.", "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidOperationException)
+                            MessageBox.Show("Something went wrong while validating your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+                        else if (ex is InvalidCastException)
+                            MessageBox.Show("Please make sure you only fill in numbers where necessary.", "Error", MessageBoxButtons.OK);
+
+                        e.Cancel = true;
+                    }
+                }
+            }
+        }
+
         private void lists_cellEditFinishing(object sender, CellEditEventArgs e)
         {
             ObjectListView list = (ObjectListView)sender;
@@ -254,8 +354,24 @@ namespace ShopManagementSystem
 
         private void lists_cellEditFinished(object sender, CellEditEventArgs e)
         {
-            dbContext.SaveChanges();
-            Console.WriteLine("finished");
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex is DbUpdateException || ex is DbUpdateConcurrencyException ||
+                    ex is DbEntityValidationException || ex is NotSupportedException ||
+                    ex is ObjectDisposedException || ex is InvalidOperationException)
+                {
+                    MessageBox.Show("Something went wrong while saving your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+                }
+            }
+        }
+
+        private void formMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 
