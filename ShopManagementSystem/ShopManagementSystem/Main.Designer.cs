@@ -76,6 +76,12 @@
             this.shopmsDataSet = new ShopManagementSystem.shopmsDataSet();
             this.itemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.itemTableAdapter = new ShopManagementSystem.shopmsDataSetTableAdapters.ItemTableAdapter();
+            this.toolStripCreateMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCreateItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCreateOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCreateSupplier = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCreateCustomer = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCreateCategory = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listShopItems)).BeginInit();
             this.tabControlLists.SuspendLayout();
@@ -99,7 +105,8 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.settingsToolStripMenuItem,
-            this.toolStripSearch});
+            this.toolStripSearch,
+            this.toolStripCreateMenu});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(910, 27);
@@ -118,13 +125,13 @@
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // settingsToolStripMenuItem
@@ -571,6 +578,48 @@
             // 
             this.itemTableAdapter.ClearBeforeFill = true;
             // 
+            // toolStripCreateMenu
+            // 
+            this.toolStripCreateMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripCreateItem,
+            this.toolStripCreateOrder,
+            this.toolStripCreateSupplier,
+            this.toolStripCreateCustomer,
+            this.toolStripCreateCategory});
+            this.toolStripCreateMenu.Name = "toolStripCreateMenu";
+            this.toolStripCreateMenu.Size = new System.Drawing.Size(53, 23);
+            this.toolStripCreateMenu.Text = "Create";
+            // 
+            // toolStripCreateItem
+            // 
+            this.toolStripCreateItem.Name = "toolStripCreateItem";
+            this.toolStripCreateItem.Size = new System.Drawing.Size(152, 22);
+            this.toolStripCreateItem.Text = "Item";
+            // 
+            // toolStripCreateOrder
+            // 
+            this.toolStripCreateOrder.Name = "toolStripCreateOrder";
+            this.toolStripCreateOrder.Size = new System.Drawing.Size(152, 22);
+            this.toolStripCreateOrder.Text = "Order";
+            // 
+            // toolStripCreateSupplier
+            // 
+            this.toolStripCreateSupplier.Name = "toolStripCreateSupplier";
+            this.toolStripCreateSupplier.Size = new System.Drawing.Size(152, 22);
+            this.toolStripCreateSupplier.Text = "Supplier";
+            // 
+            // toolStripCreateCustomer
+            // 
+            this.toolStripCreateCustomer.Name = "toolStripCreateCustomer";
+            this.toolStripCreateCustomer.Size = new System.Drawing.Size(152, 22);
+            this.toolStripCreateCustomer.Text = "Customer";
+            // 
+            // toolStripCreateCategory
+            // 
+            this.toolStripCreateCategory.Name = "toolStripCreateCategory";
+            this.toolStripCreateCategory.Size = new System.Drawing.Size(152, 22);
+            this.toolStripCreateCategory.Text = "Category";
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -657,6 +706,12 @@
         private BrightIdeasSoftware.OLVColumn columnCategoryId;
         private BrightIdeasSoftware.OLVColumn columnCategoryName;
         private BrightIdeasSoftware.OLVColumn columnCategoryDescription;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateOrder;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateSupplier;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateCustomer;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCreateCategory;
     }
 }
 

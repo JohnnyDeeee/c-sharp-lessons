@@ -2,6 +2,7 @@
 using ShopManagementSystem;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -16,7 +17,9 @@ namespace ShopManagementSystem
         private bool firstTime = true;
         private ShopmsEntities dbContext = new ShopmsEntities(); // objectListView needs a live context
         private List<ListTypeCombination> lists = new List<ListTypeCombination>();
+        private List<KeyValuePair<ToolStripItem, Type>> createStrips = new List<KeyValuePair<ToolStripItem, Type>>();
 
+        // TODO: Add 'supplier' column to Item list
         public formMain()
         {
             InitializeComponent();
@@ -44,6 +47,36 @@ namespace ShopManagementSystem
                 combi.list.CellEditValidating += new CellEditEventHandler(this.lists_cellEditValidating);
                 combi.list.CellEditFinishing += new CellEditEventHandler(this.lists_cellEditFinishing);
                 combi.list.CellEditFinished += new CellEditEventHandler(this.lists_cellEditFinished);
+            }
+
+            // Initialize toolstrip items
+            // 'Create' items
+            createStrips.Add(new KeyValuePair<ToolStripItem, Type>(toolStripCreateItem, typeof(Item)));
+            createStrips.Add(new KeyValuePair<ToolStripItem, Type>(toolStripCreateOrder, typeof(Order)));
+            createStrips.Add(new KeyValuePair<ToolStripItem, Type>(toolStripCreateSupplier, typeof(Supplier)));
+            createStrips.Add(new KeyValuePair<ToolStripItem, Type>(toolStripCreateCustomer, typeof(Customer)));
+            createStrips.Add(new KeyValuePair<ToolStripItem, Type>(toolStripCreateCategory, typeof(Category)));
+
+            foreach (KeyValuePair<ToolStripItem, Type> pair in createStrips)
+            {
+                pair.Key.Click += new EventHandler(this.createRecord);
+            }
+        }
+
+        private void createRecord(object sender, EventArgs e)
+        {
+            // Check what type to create
+            ToolStripItem item = (ToolStripItem)sender;
+            foreach (KeyValuePair<ToolStripItem, Type> pair in createStrips)
+            {
+                // Show the right form for creation
+                if (pair.Key == item)
+                {
+                    Type type = pair.Value as Type;
+                    (new CreateForm(type, dbContext)).ShowDialog();
+                    // TODO: Refresh list
+                    lists.Where(x => x.dbSet.ElementType == type).FirstOrDefault().list.BuildList();
+                }
             }
         }
 
@@ -142,7 +175,7 @@ namespace ShopManagementSystem
                 // TODO: Find Date+Time picker to use here
                 DateTimePicker pick = new DateTimePicker();
                 pick.Format = DateTimePickerFormat.Custom;
-                pick.CustomFormat = "dd-mm-yyyy hh:mm:ss";
+                pick.CustomFormat = "dd-MM-yyyy hh:mm:ss";
                 pick.ShowUpDown = true;
                 pick.Value = (DateTime)e.Value;
                 pick.Bounds = e.CellBounds;
