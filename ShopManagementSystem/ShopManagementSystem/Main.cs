@@ -39,6 +39,8 @@ namespace ShopManagementSystem
 
                 // Initialize cell editors
                 combi.list.CellEditStarting += new CellEditEventHandler(this.lists_cellEditStarting);
+                combi.list.CellEditFinishing += new CellEditEventHandler(this.lists_cellEditFinishing);
+                combi.list.CellEditFinished += new CellEditEventHandler(this.lists_cellEditFinished);
             }
         }
 
@@ -121,7 +123,6 @@ namespace ShopManagementSystem
         private void lists_cellEditStarting(object sender, CellEditEventArgs e)
         {
             ObjectListView list = (ObjectListView)sender;
-            Console.WriteLine(list.Name);
 
             // Global editors
             if (e.Value is Decimal)
@@ -193,6 +194,68 @@ namespace ShopManagementSystem
                     e.Control = cbox;
                 }
             }
+        }
+
+        private void lists_cellEditFinishing(object sender, CellEditEventArgs e)
+        {
+            ObjectListView list = (ObjectListView)sender;
+
+            // Items
+            if (list.Name == listShopItems.Name)
+            {
+                Item item = (Item)e.RowObject;
+
+                // Category
+                if (e.Column.AspectName == "CategoryName")
+                {
+                    string categoryName = (e.Control as ComboBox).SelectedItem.ToString();
+                    item.Category = dbContext.Category.First(x => x.Name == categoryName);
+                }
+
+                listShopItems.RefreshItem(e.ListViewItem);
+            }
+            // Orders
+            else if (list.Name == listShopOrders.Name)
+            {
+                Order order = (Order)e.RowObject;
+
+                // Customer ID
+                if (e.Column.AspectName == "Customer_Id")
+                {
+                    int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                    order.Customer = dbContext.Customer.First(x => x.Id == id);
+                }
+
+                listShopOrders.RefreshItem(e.ListViewItem);
+            }
+            // Orderrules
+            else if (list.Name == listShopOrderrules.Name)
+            {
+                Orderrule orderrule = (Orderrule)e.RowObject;
+
+                // Order ID
+                if (e.Column.AspectName == "Order_Id")
+                {
+                    int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                    orderrule.Order = dbContext.Order.First(x => x.Id == id);
+                }
+                // Item ID
+                else if (e.Column.AspectName == "Item_Id")
+                {
+                    int id = Convert.ToInt32((e.Control as ComboBox).SelectedItem);
+                    orderrule.Item = dbContext.Item.First(x => x.Id == id);
+                }
+
+                listShopOrderrules.RefreshItem(e.ListViewItem);
+            }
+
+            e.Cancel = true;
+        }
+
+        private void lists_cellEditFinished(object sender, CellEditEventArgs e)
+        {
+            dbContext.SaveChanges();
+            Console.WriteLine("finished");
         }
     }
 
