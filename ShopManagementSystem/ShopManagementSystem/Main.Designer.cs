@@ -34,10 +34,11 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSearch = new System.Windows.Forms.ToolStripTextBox();
             this.listShopItems = new BrightIdeasSoftware.ObjectListView();
             this.columnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.columnPrice = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.columnDescription = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.columnPrice = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.columnStock = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.columnCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.menuStrip.SuspendLayout();
@@ -48,10 +49,11 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.toolStripSearch});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(910, 24);
+            this.menuStrip.Size = new System.Drawing.Size(910, 27);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -61,7 +63,7 @@
             this.exportToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 23);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exportToolStripMenuItem
@@ -81,7 +83,7 @@
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itemsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 23);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // itemsToolStripMenuItem
@@ -89,6 +91,20 @@
             this.itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
             this.itemsToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.itemsToolStripMenuItem.Text = "Items";
+            // 
+            // toolStripSearch
+            // 
+            this.toolStripSearch.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSearch.AutoCompleteCustomSource.AddRange(new string[] {
+            "test"});
+            this.toolStripSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripSearch.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripSearch.Name = "toolStripSearch";
+            this.toolStripSearch.Size = new System.Drawing.Size(150, 23);
+            this.toolStripSearch.Text = "Search...";
+            this.toolStripSearch.ToolTipText = "Enter text here to search.";
+            this.toolStripSearch.Enter += new System.EventHandler(this.toolStripSearch_Enter);
+            this.toolStripSearch.TextChanged += new System.EventHandler(this.toolStripSearch_TextChanged);
             // 
             // listShopItems
             // 
@@ -107,14 +123,16 @@
             this.columnCategory});
             this.listShopItems.Cursor = System.Windows.Forms.Cursors.Default;
             this.listShopItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listShopItems.Location = new System.Drawing.Point(0, 24);
+            this.listShopItems.Location = new System.Drawing.Point(0, 27);
             this.listShopItems.MultiSelect = false;
             this.listShopItems.Name = "listShopItems";
             this.listShopItems.ShowItemCountOnGroups = true;
-            this.listShopItems.Size = new System.Drawing.Size(910, 529);
+            this.listShopItems.Size = new System.Drawing.Size(910, 526);
             this.listShopItems.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listShopItems.TabIndex = 3;
             this.listShopItems.UseCompatibleStateImageBehavior = false;
+            this.listShopItems.UseFilterIndicator = true;
+            this.listShopItems.UseFiltering = true;
             this.listShopItems.View = System.Windows.Forms.View.Details;
             // 
             // columnName
@@ -123,18 +141,18 @@
             this.columnName.Text = "Name";
             this.columnName.UseInitialLetterForGroup = true;
             // 
-            // columnPrice
-            // 
-            this.columnPrice.AspectName = "Price";
-            this.columnPrice.AspectToStringFormat = "{0:C}";
-            this.columnPrice.Text = "Price";
-            // 
             // columnDescription
             // 
             this.columnDescription.AspectName = "Description";
             this.columnDescription.Groupable = false;
             this.columnDescription.Text = "Description";
             this.columnDescription.Width = 86;
+            // 
+            // columnPrice
+            // 
+            this.columnPrice.AspectName = "Price";
+            this.columnPrice.AspectToStringFormat = "{0:C}";
+            this.columnPrice.Text = "Price";
             // 
             // columnStock
             // 
@@ -181,6 +199,7 @@
         private BrightIdeasSoftware.OLVColumn columnDescription;
         private BrightIdeasSoftware.OLVColumn columnStock;
         private BrightIdeasSoftware.OLVColumn columnCategory;
+        private System.Windows.Forms.ToolStripTextBox toolStripSearch;
     }
 }
 
