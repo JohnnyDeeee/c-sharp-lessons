@@ -5,12 +5,12 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="62d4c9f8d2194e858bdc8f17b65873dc" Name="Diagram1">
-        <EntityTypeShape EntityType="ShopmsModel.Category" Width="1.5" PointX="0.75" PointY="5.5" />
+        <EntityTypeShape EntityType="ShopmsModel.Category" Width="1.5" PointX="0.75" PointY="1.5" />
         <EntityTypeShape EntityType="ShopmsModel.Customer" Width="1.5" PointX="0.75" PointY="8.375" />
         <EntityTypeShape EntityType="ShopmsModel.Item" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="ShopmsModel.Order" Width="1.5" PointX="3" PointY="8.5" />
         <EntityTypeShape EntityType="ShopmsModel.Orderrule" Width="1.5" PointX="5.25" PointY="1.5" />
-        <EntityTypeShape EntityType="ShopmsModel.Supplier" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="ShopmsModel.Supplier" Width="1.5" PointX="0.75" PointY="5.5" />
         <AssociationConnector Association="ShopmsModel.FK_Item_Category" />
         <AssociationConnector Association="ShopmsModel.FK_Order_Customer" />
         <AssociationConnector Association="ShopmsModel.FK_Item_Supplier" />

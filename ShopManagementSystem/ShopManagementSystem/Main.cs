@@ -98,7 +98,8 @@ namespace ShopManagementSystem
             listShopItems.ModelFilter = new ModelFilter(delegate (object modelObject)
             {
                 Item item = (Item)modelObject;
-                return item.Name.Contains(toolStripSearch.Text) || // Name
+                return item.Id.ToString().Contains(toolStripSearch.Text) || // ID
+                    item.Name.Contains(toolStripSearch.Text) || // Name
                     item.Description.Contains(toolStripSearch.Text) || // Description
                     item.Price.ToString().Contains(toolStripSearch.Text) || // Price
                     item.Stock.ToString().Contains(toolStripSearch.Text) || // Stock
@@ -405,6 +406,160 @@ namespace ShopManagementSystem
         private void formMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListTypeCombination combi in lists)
+            {
+                // Get active list
+                if (combi.list.Focused)
+                {
+                    // Get selected item
+                    object selectedItem = combi.list.SelectedObject;
+
+                    DeleteObject(combi.list, selectedItem, combi.dbSet.ElementType.Name);
+
+                    break;
+                }
+            }
+
+        }
+
+        // TODO: Shorten
+        private void DeleteObject(ObjectListView list, object selectedItem, string typeName, bool silent = false)
+        {
+            Action extraRebuild = () => { };
+            switch (typeName)
+            {
+                case "Item":
+                    Item item = (Item)selectedItem;
+                    if (item.Orderrule.Any())
+                    {
+                        string orderruleIds = "";
+                        int counter = 1;
+                        item.Orderrule.ToList().ForEach((orderrule) => { orderruleIds += orderrule.Id.ToString() + (counter < item.Orderrule.Count() ? "," : ""); counter++; });
+                        if (!silent)
+                        {
+                            DialogResult result = MessageBox.Show(string.Format("This item has a relation with orderrule{0} (id:{1}), if you proceed the orderrule{0} will be deleted aswell\n\nDo you want to proceed?", (item.Orderrule.Count() > 1 ? "s" : ""), orderruleIds), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result != DialogResult.Yes)
+                                break;
+                        }
+                    }
+
+                    //dbContext.Orderrule.Where(x => x.Item_Id == item.Id).ToList().ForEach((orderrule) => { DeleteObject(list, orderrule, orderrule.GetType().Name, true); });
+                    dbContext.Item.Remove(item);
+                    listShopItems.RemoveObject(selectedItem); // Needed, otherwise it crashes when it wants to show the item's category formatted name
+                    extraRebuild = () => listShopOrderrules.BuildList();
+                    break;
+                case "Order":
+                    Order order = (Order)selectedItem;
+                    if (order.Orderrule.Any())
+                    {
+                        string orderruleIds = "";
+                        int counter = 1;
+                        order.Orderrule.ToList().ForEach((orderrule) => { orderruleIds += orderrule.Id.ToString() + (counter < order.Orderrule.Count() ? "," : ""); counter++; });
+                        if (!silent)
+                        {
+                            DialogResult result = MessageBox.Show(string.Format("This order has a relation with orderrule{0} (id:{1}), if you proceed the orderrule{0} will be deleted aswell\n\nDo you want to proceed?", (order.Orderrule.Count() > 1 ? "s" : ""), orderruleIds), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result != DialogResult.Yes)
+                                break; 
+                        }
+                    }
+
+                    //dbContext.Orderrule.Where(x => x.Order_Id == order.Id).ToList().ForEach((orderrule) => { DeleteObject(list, orderrule, orderrule.GetType().Name, true); });
+                    dbContext.Order.Remove(order);
+                    extraRebuild = () => listShopOrderrules.BuildList();
+                    break;
+                case "Orderrule":
+                    Orderrule rule = (Orderrule)selectedItem;
+
+                    dbContext.Orderrule.Remove(rule);
+                    break;
+                case "Supplier":
+                    Supplier supplier = (Supplier)selectedItem;
+                    if (supplier.Item.Any())
+                    {
+                        string itemIds = "";
+                        int counter = 1;
+                        supplier.Item.ToList().ForEach((_item) => { itemIds += _item.Id.ToString() + (counter < supplier.Item.Count() ? "," : ""); counter++; });
+                        if (!silent)
+                        {
+                            DialogResult result = MessageBox.Show(string.Format("This supplier has a relation with item{0} (id:{1}), if you proceed the item{0} will be deleted aswell\n\nDo you want to proceed?", (supplier.Item.Count() > 1 ? "s" : ""), itemIds), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result != DialogResult.Yes)
+                                break; 
+                        }
+                    }
+
+                    //dbContext.Item.Where(x => x.Supplier_Id == supplier.Id).ToList().ForEach((_item) => { DeleteObject(list, _item, _item.GetType().Name, true); });
+                    dbContext.Supplier.Remove(supplier);
+                    extraRebuild = () => listShopItems.BuildList();
+                    break;
+                case "Customer":
+                    Customer customer = (Customer)selectedItem;
+                    if (customer.Order.Any())
+                    {
+                        string orderIds = "";
+                        int counter = 1;
+                        customer.Order.ToList().ForEach((_order) => { orderIds += _order.Id.ToString() + (counter < customer.Order.Count() ? "," : ""); counter++; });
+                        if (!silent)
+                        {
+                            DialogResult result = MessageBox.Show(string.Format("This customer has a relation with order{0} (id:{1}), if you proceed the order{0} will be deleted aswell\n\nDo you want to proceed?", (customer.Order.Count() > 1 ? "s" : ""), orderIds), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result != DialogResult.Yes)
+                                break; 
+                        }
+                    }
+
+                    //dbContext.Order.Where(x => x.Customer_Id == customer.Id).ToList().ForEach((_order) => { DeleteObject(list, _order, _order.GetType().Name, true); });
+                    dbContext.Customer.Remove(customer);
+                    extraRebuild = () => listShopOrders.BuildList();
+                    break;
+                case "Category":
+                    Category category = (Category)selectedItem;
+                    if (category.Item.Any())
+                    {
+                        string itemIds = "";
+                        int counter = 1;
+                        category.Item.ToList().ForEach((_item) => { itemIds += _item.Id.ToString() + (counter < category.Item.Count() ? "," : ""); counter++; });
+                        if (!silent)
+                        {
+                            DialogResult result = MessageBox.Show(string.Format("This category has a relation with item{0} (id:{1}), if you proceed the item{0} will be deleted aswell\n\nDo you want to proceed?", (category.Item.Count() > 1 ? "s" : ""), itemIds), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result != DialogResult.Yes)
+                                break;
+                        }
+                    }
+
+                    //dbContext.Item.Where(x => x.Category_Id == category.Id).ToList().ForEach((_item) => { DeleteObject(list, _item, _item.GetType().Name, true); });
+                    dbContext.Category.Remove(category);
+                    extraRebuild = () => listShopItems.BuildList();
+                    break;
+                default:
+                    break;
+            }
+
+            // Save changes in db
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex is DbUpdateException || ex is DbUpdateConcurrencyException ||
+                    ex is DbEntityValidationException || ex is NotSupportedException ||
+                    ex is ObjectDisposedException || ex is InvalidOperationException)
+                {
+                    MessageBox.Show("Something went wrong while saving your changes...\n\nBelow this line is the error message\n-----------\n" + ex, "Error", MessageBoxButtons.OK);
+                }
+            }
+
+            // Refresh list
+            list.BuildList();
+            extraRebuild();
         }
     }
 

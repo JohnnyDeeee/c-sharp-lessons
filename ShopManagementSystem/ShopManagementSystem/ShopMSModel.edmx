@@ -61,7 +61,9 @@
           <Property Name="Zipcode" Type="varchar" MaxLength="8" />
         </EntityType>
         <Association Name="FK_Item_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Item" Type="Self.Item" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Category">
@@ -73,7 +75,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Item_Supplier">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Item" Type="Self.Item" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -85,7 +89,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -97,7 +103,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orderrule_Item">
-          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Orderrule" Type="Self.Orderrule" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Item">
@@ -109,7 +117,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orderrule_Order">
-          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Orderrule" Type="Self.Orderrule" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Order">
@@ -318,7 +328,9 @@
           <NavigationProperty Name="Item" Relationship="ShopmsModel.FK_Item_Supplier" FromRole="Supplier" ToRole="Item" />
         </EntityType>
         <Association Name="FK_Item_Category">
-          <End Type="ShopmsModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="ShopmsModel.Category" Role="Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ShopmsModel.Item" Role="Item" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Category">
@@ -330,7 +342,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_Customer">
-          <End Type="ShopmsModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="ShopmsModel.Customer" Role="Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ShopmsModel.Order" Role="Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -342,7 +356,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Item_Supplier">
-          <End Type="ShopmsModel.Supplier" Role="Supplier" Multiplicity="1" />
+          <End Type="ShopmsModel.Supplier" Role="Supplier" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ShopmsModel.Item" Role="Item" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Supplier">
@@ -354,7 +370,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orderrule_Item">
-          <End Type="ShopmsModel.Item" Role="Item" Multiplicity="1" />
+          <End Type="ShopmsModel.Item" Role="Item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ShopmsModel.Orderrule" Role="Orderrule" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Item">
@@ -366,7 +384,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orderrule_Order">
-          <End Type="ShopmsModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="ShopmsModel.Order" Role="Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ShopmsModel.Orderrule" Role="Orderrule" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Order">
