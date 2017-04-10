@@ -85,6 +85,7 @@
             this.shopmsDataSet = new ShopManagementSystem.shopmsDataSet();
             this.itemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.itemTableAdapter = new ShopManagementSystem.shopmsDataSetTableAdapters.ItemTableAdapter();
+            this.showImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listShopItems)).BeginInit();
             this.contextMenuStripListItem.SuspendLayout();
@@ -288,9 +289,10 @@
             // 
             this.contextMenuStripListItem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteToolStripMenuItem,
+            this.showImageToolStripMenuItem,
             this.cancelToolStripMenuItem});
             this.contextMenuStripListItem.Name = "contextMenuStripListItem";
-            this.contextMenuStripListItem.Size = new System.Drawing.Size(111, 48);
+            this.contextMenuStripListItem.Size = new System.Drawing.Size(153, 92);
             // 
             // deleteToolStripMenuItem
             // 
@@ -671,6 +673,13 @@
             // 
             this.itemTableAdapter.ClearBeforeFill = true;
             // 
+            // showImageToolStripMenuItem
+            // 
+            this.showImageToolStripMenuItem.Name = "showImageToolStripMenuItem";
+            this.showImageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showImageToolStripMenuItem.Text = "Show image";
+            this.showImageToolStripMenuItem.Click += new System.EventHandler(this.showImageToolStripMenuItem_Click);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -767,6 +776,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cancelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showImageToolStripMenuItem;
     }
 }
 

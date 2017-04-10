@@ -7,7 +7,9 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ShopManagementSystem
@@ -18,6 +20,8 @@ namespace ShopManagementSystem
         private ShopmsEntities dbContext = new ShopmsEntities(); // objectListView needs a live context
         private List<ListTypeCombination> lists = new List<ListTypeCombination>();
         private List<KeyValuePair<ToolStripItem, Type>> createStrips = new List<KeyValuePair<ToolStripItem, Type>>();
+        private ImageConverter imageConverter = new ImageConverter();
+        PictureBox itemImage = new PictureBox();
 
         // TODO: Add 'supplier' column to Item list
         public formMain()
@@ -41,12 +45,14 @@ namespace ShopManagementSystem
             {
                 // Initialize data list
                 combi.list.SetObjects(combi.dbSet);
+                combi.list.AddDecoration(new EditingCellBorderDecoration { UseLightbox = true });
 
                 // Initialize cell editors
                 combi.list.CellEditStarting += new CellEditEventHandler(this.lists_cellEditStarting);
                 combi.list.CellEditValidating += new CellEditEventHandler(this.lists_cellEditValidating);
                 combi.list.CellEditFinishing += new CellEditEventHandler(this.lists_cellEditFinishing);
                 combi.list.CellEditFinished += new CellEditEventHandler(this.lists_cellEditFinished);
+                combi.list.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(this.lists_itemSelectionChanged);
             }
 
             // Initialize toolstrip items
@@ -61,6 +67,14 @@ namespace ShopManagementSystem
             {
                 pair.Key.Click += new EventHandler(this.createRecord);
             }
+
+            // Initialize item image popup
+            itemImage.Visible = false;
+            itemImage.Size = new Size(100, 100);
+            itemImage.SizeMode = PictureBoxSizeMode.Zoom;
+            itemImage.BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(itemImage);
+            itemImage.Click += new EventHandler((_sender, _e) => { itemImage.Visible = false; });
         }
 
         private void createRecord(object sender, EventArgs e)
@@ -560,6 +574,51 @@ namespace ShopManagementSystem
             // Refresh list
             list.BuildList();
             extraRebuild();
+        }
+
+        private void showImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listShopItems.Focused)
+            {
+                Item item = (listShopItems.SelectedObject as Item);
+
+                if (item == null || item.Image == null)
+                    return;
+
+                // Show image for item  
+                using (var memStream = new MemoryStream(item.Image))
+                {
+                    itemImage.Image = Image.FromStream(memStream);
+                    itemImage.Location = listShopItems.PointToClient(Cursor.Position);
+                    itemImage.Visible = true;
+                    int controlIndex = Controls.IndexOf(itemImage);
+                    Controls[controlIndex].BringToFront();
+                }
+            }
+        }
+
+        private void lists_itemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            ObjectListView list = (ObjectListView)sender;
+            if (e.IsSelected)
+            {
+                if (!(list.SelectedObject is Item) || (list.SelectedObject as Item).Image == null)
+                {
+                    foreach (ToolStripMenuItem item in list.ContextMenuStrip.Items)
+                    {
+                        if (item.Name == "showImageToolStripMenuItem")
+                            item.Enabled = false;
+                    }
+                }
+                else
+                {
+                    foreach (ToolStripMenuItem item in list.ContextMenuStrip.Items)
+                    {
+                        if (item.Name == "showImageToolStripMenuItem")
+                            item.Enabled = true;
+                    }
+                }
+            }
         }
     }
 

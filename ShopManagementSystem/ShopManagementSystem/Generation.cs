@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace ShopManagementSystem
@@ -8,10 +9,19 @@ namespace ShopManagementSystem
     static class Generation
     {
         private static Random rand = new Random();
+        private static List<Bitmap> images = new List<Bitmap>();
+        private static ImageConverter imgConverter = new ImageConverter();
 
         // Start generation
         public static void Generate()
         {
+            // Hardcoded images for testing
+            images.Add(Properties.Resources.icon_1);
+            images.Add(Properties.Resources.icon_2);
+            images.Add(Properties.Resources.icon_3);
+            images.Add(Properties.Resources.icon_4);
+            images.Add(Properties.Resources.icon_5);
+
             GenerateCategories();
             GenerateSuppliers();
             GenerateItems();
@@ -41,6 +51,7 @@ namespace ShopManagementSystem
                     item.Description = GenerateRandomText(rand.Next(10, 20));
                     item.Supplier_Id = context.Supplier.OrderBy(x => Guid.NewGuid()).First().Id;
                     item.Stock = rand.Next(0, 1000);
+                    item.Image = (byte[])imgConverter.ConvertTo(images[rand.Next(0, images.Count - 1)], typeof(byte[]));
                     context.Item.Add(item);
                     context.SaveChanges();
                 }

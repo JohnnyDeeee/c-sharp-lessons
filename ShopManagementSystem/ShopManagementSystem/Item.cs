@@ -27,6 +27,7 @@ namespace ShopManagementSystem
         public string Description { get; set; }
         public int Supplier_Id { get; set; }
         public int Stock { get; set; }
+        public byte[] Image { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual Supplier Supplier { get; set; }
