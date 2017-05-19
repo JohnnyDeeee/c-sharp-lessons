@@ -1,0 +1,78 @@
+﻿@model WebTestProject.Models.Trainer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Trainer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Motto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Motto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pokemons)
+        </dt>
+        <dd>
+            @if (Model.Pokemons != null)
+            {
+                <table>
+                    @foreach (var pokemon in Model.Pokemons)
+                    {
+                    <tr>
+                        <th>
+                            <text>Name</text>
+                        </th>
+                        <td>
+                            @Html.DisplayText(pokemon.Name)
+                        </td>
+                        <th>
+                            <text>Type</text>
+                        </th>
+                        <td>
+                            @Html.DisplayText(pokemon.Type.ToString())
+                        </td>
+                        <th>
+                            <text>Level</text>
+                        </th>
+                        <td>
+                            @Html.DisplayText(pokemon.Level.ToString())
+                        </td>
+                    </tr>
+                    }
+                </table>
+            }
+            else
+            {
+                @:N/A
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
