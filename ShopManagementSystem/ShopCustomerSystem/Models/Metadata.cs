@@ -6,17 +6,30 @@ using System.Web;
 
 namespace ShopCustomerSystem.Models
 {
-	public class Metadata
-	{
-        // Example metadata for: Items
-        [MetadataType(typeof(Item.MetaData))]
-        public partial class Item
-        {
-            internal class MetaData
-            {
-                [Display(Name = "Is good price my friend!")]
-                public decimal Price;
-            }
-        }
+    // Metadata for: Items
+    [MetadataType(typeof(ItemMetaData))]
+    public partial class Item { }
+    public class ItemMetaData
+    {
+        [Display(Name = "Is good price my friend!")]
+        public decimal Price { get; set; }
+    }
+
+    // Metadata for: Category
+    [MetadataType(typeof(CategoryMetaData))]
+    public partial class Category { }
+    public class CategoryMetaData
+    {
+        [Display(Name = "Category")]
+        public string Name { get; set; }
+    }
+
+    // Metadata for: Supplier
+    [MetadataType(typeof(SupplierMetaData))]
+    public partial class Supplier { }
+    public class SupplierMetaData
+    {
+        [Display(Name = "Supplier")]
+        public string Name { get; set; }
     }
 }
