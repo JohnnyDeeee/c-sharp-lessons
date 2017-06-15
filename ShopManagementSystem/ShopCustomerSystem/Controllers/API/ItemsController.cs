@@ -37,23 +37,26 @@ namespace ShopCustomerSystem.Controllers.API
             return Ok(item);
         }
 
-        // GET: api/Items/MODEL_PROPERTY/ASC_OR_DESC
-        //[ResponseType(typeof(JsonResult<List<Item>>))]
-        public IQueryable<Item> GetItemsOrdered(string property, string order)
+        // GET: api/Items/GetItemsOrdered?property=MODEL_PROPERTY&order=ASC_OR_DESC
+        public IHttpActionResult GetItemsOrdered(string property, string order)
         {
-            //IQueryable<Item> items = db.Item;
-            //property = property.First().ToString().ToUpper() + String.Join("", property.Skip(1)); // Make first letter uppercase
-            //PropertyInfo propertyInfo = new Item().GetType().GetProperty(property);
+            IEnumerable<Item> items = db.Item;
+            property = property.First().ToString().ToUpper() + String.Join("", property.Skip(1)); // Make first letter uppercase
+            PropertyInfo propertyInfo = new Item().GetType().GetProperty(property);
 
-            //if (order.ToLower() == "asc")
-            //    items = db.Item.OrderBy(i => propertyInfo.GetValue(i, null));
-            //else if (order.ToLower() == "desc")
-            //    items = db.Item.OrderByDescending(i => propertyInfo.GetValue(i, null));
-            //else
-                //return BadRequest(string.Format("Order type '{0}' is not allowed! Allowed types are '{1}' and '{2}'"));
+            if (propertyInfo != null)
+            {
+                if (order.ToLower() == "asc")
+                    items = db.Item.AsEnumerable().OrderBy(i => propertyInfo.GetValue(i, null)).ToList();
+                else if (order.ToLower() == "desc")
+                    items = db.Item.AsEnumerable().OrderByDescending(i => propertyInfo.GetValue(i, null)).ToList();
+                else
+                    return BadRequest(string.Format("Order type '{0}' is not allowed! Allowed types are '{1}' and '{2}'"));
+            }
+            else
+                return BadRequest(string.Format("Property value is not valid!"));
 
-            //return Ok(Json(items));
-            return db.Item;
+            return Ok(items);
         }
 
         // PUT: api/Items/5

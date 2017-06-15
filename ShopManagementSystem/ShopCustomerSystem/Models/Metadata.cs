@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +14,13 @@ namespace ShopCustomerSystem.Models
     {
         [Display(Name = "Is good price my friend!")]
         public decimal Price { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Orderrule> Orderrule { get; set; }
+        [JsonIgnore]
+        public virtual Category Category { get; set; }
+        [JsonIgnore]
+        public virtual Supplier Supplier { get; set; }
     }
 
     // Metadata for: Category
