@@ -17,10 +17,6 @@ namespace ShopCustomerSystem.Models
 
         [JsonIgnore]
         public virtual ICollection<Orderrule> Orderrule { get; set; }
-        [JsonIgnore]
-        public virtual Category Category { get; set; }
-        [JsonIgnore]
-        public virtual Supplier Supplier { get; set; }
     }
 
     // Metadata for: Category
@@ -30,6 +26,9 @@ namespace ShopCustomerSystem.Models
     {
         [Display(Name = "Category")]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Item> Item { get; set; }
     }
 
     // Metadata for: Supplier
@@ -39,5 +38,8 @@ namespace ShopCustomerSystem.Models
     {
         [Display(Name = "Supplier")]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Item> Item { get; set; }
     }
 }
