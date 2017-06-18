@@ -11,118 +11,100 @@ using System.Web.Http.Description;
 using ShopCustomerSystem.Models;
 using System.Reflection;
 using System.Web.Http.Results;
+using System.Web;
 
 namespace ShopCustomerSystem.Controllers.API
 {
+    [RoutePrefix("api/Items")]
     public class ItemsController : ApiController
     {
         private shopmsEntities db = new shopmsEntities();
 
-        // GET: api/Items
-        public IQueryable<Item> GetItem()
-        {
-            return db.Item;
-        }
-
-        // GET: api/Items/5
-        [ResponseType(typeof(Item))]
-        public IHttpActionResult GetItem(int id)
-        {
-            Item item = db.Item.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(item);
-        }
-
-        // GET: api/Items/GetItemsOrdered?property=MODEL_PROPERTY&order=ASC_OR_DESC
+        // GET: api/Items/GetItemsOrdered/MODEL_PROPERTY/ASC_OR_DESC
+        [Route("GetItemsOrdered/{property}/{order}")]
+        [HttpGet]
         public IHttpActionResult GetItemsOrdered(string property, string order)
         {
             IEnumerable<Item> items = db.Item;
             property = property.First().ToString().ToUpper() + String.Join("", property.Skip(1)); // Make first letter uppercase
             PropertyInfo propertyInfo = new Item().GetType().GetProperty(property);
 
-            if (propertyInfo != null)
+            // Sadly this has to be hardcoded for now...
+            string categoryOrSupplier = property.ToLower() == "category" || property.ToLower() == "supplier" ? property.ToLower() : null;
+            propertyInfo = categoryOrSupplier != null ? null : propertyInfo;
+
+            try
             {
                 if (order.ToLower() == "asc")
-                    items = db.Item.AsEnumerable().OrderBy(i => propertyInfo.GetValue(i, null)).ToList();
+                    items = db.Item.AsEnumerable().OrderBy(i => propertyInfo != null ? propertyInfo.GetValue(i, null) : categoryOrSupplier == "category" ? i.Category.Name : categoryOrSupplier == "supplier" ? i.Supplier.Name : "").ToList(); // Yes the nested ternaries are very ugly, but i just wanted to see if they worked..
                 else if (order.ToLower() == "desc")
-                    items = db.Item.AsEnumerable().OrderByDescending(i => propertyInfo.GetValue(i, null)).ToList();
+                    items = db.Item.AsEnumerable().OrderByDescending(i => propertyInfo != null ? propertyInfo.GetValue(i, null) : categoryOrSupplier == "category" ? i.Category.Name : categoryOrSupplier == "supplier" ? i.Supplier.Name : "").ToList(); // Yes the nested ternaries are very ugly, but i just wanted to see if they worked..
                 else
                     return BadRequest(string.Format("Order type '{0}' is not allowed! Allowed types are '{1}' and '{2}'"));
             }
-            else
-                return BadRequest(string.Format("Property value is not valid!"));
+            catch (Exception e)
+            {
+                return BadRequest("Something went very wrong! Here is the stacktrace\n\n" + e.ToString());
+            }
 
             return Ok(items);
         }
 
-        // PUT: api/Items/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutItem(int id, Item item)
+        // GET: api/Items/GetItemsFromSearch/SEARCHTEXT
+        [Route("GetItemsFromSearch/{searchText}")]
+        [HttpGet]
+        public IHttpActionResult GetItemsFromSearch(string searchText)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(item).State = EntityState.Modified;
+            // Just gonna make this all hardcoded (unlike GetItemsOrdered() ), because it consumes to much time (its fun though)
+            List<Item> items = new List<Item>();
 
             try
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
+                if (searchText != null)
                 {
-                    return NotFound();
+                    int searchTextToInt = -1;
+                    bool numeric = Int32.TryParse(searchText, out searchTextToInt);
+                    if (!numeric)
+                    {
+                        db.Item.Where(i => i.Name.Contains(searchText)).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                        db.Item.Where(i => i.Description.Contains(searchText)).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                        db.Item.Where(i => i.Category.Name.Contains(searchText)).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                        db.Item.Where(i => i.Supplier.Name.Contains(searchText)).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                    }
+                    else
+                    {
+                        db.Item.Where(i => i.Price == searchTextToInt).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                        db.Item.Where(i => i.Stock == searchTextToInt).ToList().ForEach(delegate (Item item) { items.Add(item); });
+                    }
                 }
                 else
-                {
-                    throw;
-                }
+                    items = db.Item.ToList();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something went very wrong! Here is the stacktrace\n\n" + e.ToString());
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(items);
         }
 
-        // POST: api/Items
-        [ResponseType(typeof(Item))]
-        public IHttpActionResult PostItem(Item item)
+        // POST: api/Items/AddItemToCart
+        [Route("AddItemToCart/{id:int}")]
+        [HttpPost]
+        public IHttpActionResult AddItemToCart(int id)
         {
-            if (!ModelState.IsValid)
+            // Using sessions here because i didnt want to rebuild my order model to have a 'status' or make a link with an 'user'
+            try
             {
-                return BadRequest(ModelState);
+                Item item = db.Item.Single(i => i.Id == id);
+                HttpContext.Current.Session.Add("OrderedItem:"+Guid.NewGuid(), item);
+
+                return Ok();
             }
-
-            db.Item.Add(item);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = item.Id }, item);
-        }
-
-        // DELETE: api/Items/5
-        [ResponseType(typeof(Item))]
-        public IHttpActionResult DeleteItem(int id)
-        {
-            Item item = db.Item.Find(id);
-            if (item == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest("Something went very wrong! Here is the stacktrace\n\n" + e.ToString());
             }
-
-            db.Item.Remove(item);
-            db.SaveChanges();
-
-            return Ok(item);
         }
 
         protected override void Dispose(bool disposing)
@@ -132,11 +114,6 @@ namespace ShopCustomerSystem.Controllers.API
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool ItemExists(int id)
-        {
-            return db.Item.Count(e => e.Id == id) > 0;
         }
     }
 }

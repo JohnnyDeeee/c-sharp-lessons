@@ -2,38 +2,41 @@
 
 @{
     ViewBag.Title = "Index";
+   
 }
 
 <h2>Index</h2>
 
+<input id="search" placeholder="Search..." onkeypress="SearchList(event)" />
+
 <table class="table" id="list">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            <a id="nameOrderLink" href="#" onclick="OrderList('name', 'asc');">@Html.DisplayNameFor(model => model.Name)</a>
         </th>
         <th>
-            <a href="#" onclick="OrderList('price', 'asc')">@Html.DisplayNameFor(model => model.Price)</a>
+            <a id="priceOrderLink" href="#" onclick="OrderList('price', 'asc');">@Html.DisplayNameFor(model => model.Price)</a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            <a id="descriptionOrderLink" href="#" onclick="OrderList('description', 'asc');">@Html.DisplayNameFor(model => model.Description)</a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Stock)
+            <a id="stockOrderLink" href="#" onclick="OrderList('stock', 'asc');">@Html.DisplayNameFor(model => model.Stock)</a>
         </th>
         @*<th>
             @Html.DisplayNameFor(model => model.Image)
         </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            <a id="categoryOrderLink" href="#" onclick="OrderList('category', 'asc');">@Html.DisplayNameFor(model => model.Category.Name)</a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Supplier.Name)
+            <a id="supplierOrderLink" href="#" onclick="OrderList('supplier', 'asc');">@Html.DisplayNameFor(model => model.Supplier.Name)</a>
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+    <tr class="itemRow">
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
@@ -56,7 +59,7 @@
             @Html.DisplayFor(modelItem => item.Supplier.Name)
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", new { id=item.Id })
+            <a id="addToCart" href="#" onclick="AddToCart('@item.Id');">Add to cart</a>
         </td>
     </tr>
 }
@@ -66,12 +69,10 @@
 @section Scripts {
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
-        window.applicationBaseUrl = @Html.Raw(HttpUtility.JavaScriptStringEncode(
-        new Uri(
-            new Uri(this.Context.Request.Url.GetLeftPart(UriPartial.Authority)),
-            Url.Content("~/")
-            ).ToString(), true));
+        window.applicationBaseUrl = '@Url.Content(WebApiConfig.UrlPrefixRelative)';
     </script>
     
     <script src="~/Scripts/Custom/JavaScript.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/toastr.min.css" />
     }
