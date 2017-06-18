@@ -51,16 +51,16 @@ namespace ShopCustomerSystem.Controllers.API
         }
 
         // GET: api/Items/GetItemsFromSearch/SEARCHTEXT
-        [Route("GetItemsFromSearch/{searchText}")]
+        [Route("GetItemsFromSearch/{searchText?}")]
         [HttpGet]
-        public IHttpActionResult GetItemsFromSearch(string searchText)
+        public IHttpActionResult GetItemsFromSearch(string searchText = "")
         {
             // Just gonna make this all hardcoded (unlike GetItemsOrdered() ), because it consumes to much time (its fun though)
             List<Item> items = new List<Item>();
 
             try
             {
-                if (searchText != null)
+                if (searchText != "")
                 {
                     int searchTextToInt = -1;
                     bool numeric = Int32.TryParse(searchText, out searchTextToInt);
@@ -97,9 +97,37 @@ namespace ShopCustomerSystem.Controllers.API
             try
             {
                 Item item = db.Item.Single(i => i.Id == id);
-                HttpContext.Current.Session.Add("OrderedItem:"+Guid.NewGuid(), item);
+                // Sometimes category and supplier are empty so shopping page crashes.. Thats why we "refill" the Item with the Category and Supplier object
+                item.Category = item.Category == null ? db.Category.Single(c => c.Id == item.Category_Id) : item.Category;
+                item.Supplier = item.Supplier == null ? db.Supplier.Single(s => s.Id == item.Supplier_Id) : item.Supplier;
+                HttpContext.Current.Session.Add("OrderedItem:"+id+"_"+Guid.NewGuid(), item); // Using Guid because key needs to be unique -__-"
 
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something went very wrong! Here is the stacktrace\n\n" + e.ToString());
+            }
+        }
+
+        // POST: api/Items/RemoveItemFromCart
+        [Route("RemoveItemFromCart/{id:int}")]
+        [HttpPost]
+        public IHttpActionResult RemoveItemFromCart(int id)
+        {
+            // Using sessions here because i didnt want to rebuild my order model to have a 'status' or make a link with an 'user'
+            try
+            {
+                foreach (string key in HttpContext.Current.Session)
+                {
+                    if ((HttpContext.Current.Session[key] as Item).Id == id)
+                    {
+                        HttpContext.Current.Session.Remove(key);
+                        return Ok();
+                    }
+                }
+
+                return BadRequest("Could not find session key with id: " + id);
             }
             catch (Exception e)
             {

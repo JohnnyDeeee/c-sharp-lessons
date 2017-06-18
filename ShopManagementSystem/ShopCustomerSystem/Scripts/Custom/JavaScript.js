@@ -53,6 +53,25 @@ function AddToCart(itemId)
     })
 }
 
+function RemoveFromCart(itemUniqueId)
+{
+    var itemId = itemUniqueId.split("_")[0];
+    $.ajax({
+        url: window.applicationBaseUrl + '/Items/RemoveItemFromCart/' + itemId,
+        type: 'POST',
+        success: function (data) {
+            //console.log("succes message: ", data);
+            // Remove item from table
+            $("#list #" + itemUniqueId).remove();
+            toastr.success("Item has been removed from your shopping cart!");
+        },
+        error: function (data) {
+            //console.log("error message: ", data);
+            toastr.error("Could not remove this item to your shopping cart, please try again later...");
+        }
+    })
+}
+
 
 
 
@@ -72,7 +91,7 @@ function RePopulateList(data)
         newRowData += "<td>" + data[i].Stock + "</td>";
         newRowData += "<td>" + data[i].Category.Name + "</td>";
         newRowData += "<td>" + data[i].Supplier.Name + "</td>";
-        // TODO: Add order link
+        newRowData += "<td>" + "<a id='addToCart' href='#' onclick='AddToCart("+data[i].Id+");'>Add to cart</a>" + "</td>";
 
         var newRow = "<tr class='itemRow'>" + newRowData + "</tr>";
 
