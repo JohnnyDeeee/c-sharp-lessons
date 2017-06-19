@@ -63,6 +63,11 @@ function RemoveFromCart(itemUniqueId)
             //console.log("succes message: ", data);
             // Remove item from table
             $("#list #" + itemUniqueId).remove();
+            if ($("#list tr").length <= 1)
+            {
+                $("#list").hide();
+                $("#noItemsSpan").show();
+            }
             toastr.success("Item has been removed from your shopping cart!");
         },
         error: function (data) {
